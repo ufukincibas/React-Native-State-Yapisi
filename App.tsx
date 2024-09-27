@@ -1,118 +1,35 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React , {useState} from "react";
+import { Text, View ,FlatList , Button , Switch } from "react-native";
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const data = [
+ { id:0 , name:"Acoffe" ,isfavorite: true },
+ { id:1 , name:"Bcoffe" ,isfavorite: false},
+ { id:2 , name:"Ccoffe" ,isfavorite: false},
+ { id:3 , name:"Dcoffe" ,isfavorite: true},
+ { id:4 , name:"Ecoffe" ,isfavorite: false},
+ { id:5 , name:"Fcoffe" ,isfavorite: false},
+]
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+function App(){
+  const [cafeList , setCafeList] = useState(data) ; 
+  const [showOnlyFavorites , setShowOnlyFavorites] = useState(false); //sondaki false sadece favorileri goruntuleme anlamında
+  function onfavoriteChange(isFavoriteSelected){
+    setShowOnlyFavorites(isFavoriteSelected);
+    isFavoriteSelected ? //true ysa
+    setCafeList(cafeList.filter(cafe => cafe.isfavorite))
+    : setCafeList(data) ; //degilse
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+  }
+  return(
+<View style={{margin:10}}>
+  <Text>
+    Favorite Only
+  </Text>
+  <Switch value={showOnlyFavorites} onValueChange={onfavoriteChange}/>
+  <FlatList data={cafeList} renderItem={({item}) => <Text style={{fontSize:25}}>{item.name}</Text>} />
+
+</View>
   );
 }
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
 export default App;
